@@ -1,0 +1,41 @@
+services:
+  - type: web
+    name: n8n
+    env: docker
+    repo: https://github.com/Jimmyjoe13/n8n.git # Remplacez par votre repo GitHub si nécessaire
+    region: frankfurt # Vous pouvez choisir une autre région si nécessaire
+    plan: standard # Choisissez le plan qui vous convient
+    branch: main # Remplacez par votre branche principale
+    dockerfilePath: ./Dockerfile
+    numInstances: 1
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: N8N_PORT
+        value: 5678
+      - key: N8N_PROTOCOL
+        value: https
+      - key: DATABASE_TYPE
+        value: sqlite
+      - key: N8N_ENCRYPTION_KEY
+        fromDatabase:
+          name: n8n-db
+          key: ENCRYPTION_KEY
+      - key: N8N_USER_MANAGEMENT_DISABLED
+        value: false
+      - key: N8N_BASIC_AUTH_ACTIVE
+        value: true
+      - key: N8N_BASIC_AUTH_USER
+        fromDatabase:
+          name: n8n-db
+          key: BASIC_AUTH_USER
+      - key: N8N_BASIC_AUTH_PASSWORD
+        fromDatabase:
+          name: n8n-db
+          key: BASIC_AUTH_PASSWORD
+
+databases:
+  - name: n8n-db
+    region: frankfurt
+    plan: standard
