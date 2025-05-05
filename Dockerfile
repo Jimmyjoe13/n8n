@@ -12,6 +12,7 @@ RUN npm install -g pnpm@10.2.1
 COPY . .
 
 # Install dependencies
+ENV DOCKER_BUILD=1
 RUN pnpm install
 
 # Build the application
